@@ -17,6 +17,8 @@ CONVERSATION_STATES = {
     'ENTER_VALUE': 2,
     'CONFIRM': 3,
 }
+# Initialize the current state for each user
+user_states = {}
 
 # Initialize the current state as 'START'
 current_state = CONVERSATION_STATES['START']
@@ -40,65 +42,55 @@ keyword_responses = {
 
 if __name__ == '__main__':
     client = TelegramClient('my_session', API_ID, API_HASH, sequential_updates=True)
-    @client.on(events.NewMessage(incoming=True))
-    async def handle_new_message(event):
-        global current_state, conversation_active
-        if event.is_private:
-            from_ = await event.client.get_entity(event.from_id)
-            if not from_.bot:
-                message_text = event.message.text.lower()
-                response = None
+async def handle_new_message(event):
 
-                if 'تم' in message_text:
-                    current_state = CONVERSATION_STATES['START']
-                    conversation_active = False
-                    response = keyword_responses['تم']
-                elif 'بدا' in message_text:
-                    conversation_active = True
-                    response = keyword_responses['بدا']
-                elif 'مساعدة' in message_text:
-                    response = keyword_responses['مساعدة']
-                else:
-                    response = keyword_responses['default']
+    user_id = event.from_id
 
-                if conversation_active:
-                    if current_state == CONVERSATION_STATES['START']:
-                        if '1' in message_text or 'شراء' in message_text or 'شراء usdt' in message_text:
-                            current_state = CONVERSATION_STATES['BUY_SELL_CHOICE']
-                            response = keyword_responses['شراء']
-                        elif '2' in message_text or 'بيع' in message_text or 'بيع usdt' in message_text:
-                            current_state = CONVERSATION_STATES['BUY_SELL_CHOICE']
-                            response = keyword_responses['بيع']
-                        else:
-                            response = keyword_responses['بدا']
+    # Check if the user ID is in the user_states dictionary
+    if user_id not in user_states:
+        # If the user ID is not in the user_states dictionary, add it and initialize the current state to START
+        user_states[user_id] = CONVERSATION_STATES['START']
 
-                    elif current_state == CONVERSATION_STATES['BUY_SELL_CHOICE']:
-                        if any(word.isdigit() and int(word) >= 1 for word in message_text.split()):
-                            current_state = CONVERSATION_STATES['ENTER_VALUE']
-                            response = keyword_responses['القيمة']
-                        elif any(word.isalpha() for word in message_text.split()):
-                            response = keyword_responses['التحويل']
-                        else:
-                            response = keyword_responses['التحويل']
+    # Get the current state for the user
+    current_state = user_states[user_id]
 
+    # Check the user's ID and send the appropriate response
+    if current_state == CONVERSATION_STATES['START']:
+        if event.message.text == 'بدا':
+            response = keyword_responses['بدا']
+            current_state = CONVERSATION_STATES['BUY_SELL_CHOICE']
+        elif event.message.text == 'مساعدة':
+            response = keyword_responses['مساعدة']
+        else:
+            response = keyword_responses['default']
+    elif current_state == CONVERSATION_STATES['BUY_SELL_CHOICE']:
+        if event.message.text == '1' or event.message.text == 'شراء' or event.message.text == 'شراء usdt':
+            response = keyword_responses['شراء']
+            current_state = CONVERSATION_STATES['ENTER_VALUE']
+        elif event.message.text == '2' or event.message.text == 'بيع' or event.message.text == 'بيع usdt':
+            response = keyword_responses['بيع']
+            current_state = CONVERSATION_STATES['ENTER_VALUE']
+        else:
+            response = keyword_responses['بدا']
+    elif current_state == CONVERSATION_STATES['ENTER_VALUE']:
+        if event.message.text == 'نعم':
+            response = keyword_responses['نعم']
+            current_state = CONVERSATION_STATES['CONFIRM']
+            await event.respond(file='code.png')
+        elif event.message.text == 'لا':
+            response = keyword_responses['لا']
+            current_state = CONVERSATION_STATES['START']
+        else:
+            response = keyword_responses['تاكيد']
 
-                    elif current_state == CONVERSATION_STATES['ENTER_VALUE']:
-                        if 'نعم' in message_text:
-                            current_state = CONVERSATION_STATES['CONFIRM']
-                            response = keyword_responses['نعم']
-                            await event.respond(file='code.png')
-                        elif 'لا' in message_text:
-                            current_state = CONVERSATION_STATES['START']
-                            response = keyword_responses['لا']
-                            conversation_active = False
-                        else:
-                            response = keyword_responses['تاكيد']
+    # Update the current state for the user
+        user_states[user_id] = current_state
 
-                if response:
+        if response:
                     print(time.asctime(), '-', event.message, '-', current_state)
                     time.sleep(1)
                     await event.respond(response)
-                else:
+        else:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
     print(time.asctime(), '-', 'Auto-replying...')
