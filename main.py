@@ -101,7 +101,7 @@ if __name__ == '__main__':
                         if 'نعم' in message_text:
                             current_state = 3
                             response = keyword_responses['نعم']
-                            response = keyword_responses['نعم']
+                            response = keyword_responses['نعمين']
                             await event.respond(file='code.png')
                         elif 'لا' in message_text:
                             current_state = 0
