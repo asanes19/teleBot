@@ -1,9 +1,10 @@
 import time
 from telethon import TelegramClient, events
+from keep_alive import keep_alive
+keep_alive()
 
-
-api_id = 21250696
-api_hash = '12d4137b3561860cdc4d876966539b36'
+API_ID = 21250696
+API_HASH = '12d4137b3561860cdc4d876966539b36'
 session_file = 'my_session'
 
 phone = '+971562588105'
@@ -38,7 +39,7 @@ keyword_responses = {
 }
 
 if __name__ == '__main__':
-    client = TelegramClient('my_session', api_id, api_hash, sequential_updates=True)
+    client = TelegramClient('my_session', API_ID, API_HASH, sequential_updates=True)
     @client.on(events.NewMessage(incoming=True))
     async def handle_new_message(event):
         global current_state, conversation_active
