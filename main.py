@@ -1,7 +1,6 @@
 import time
 from telethon import TelegramClient, events
-from keep_alive import keep_alive
-keep_alive()
+
 
 api_id = 21250696
 api_hash = '12d4137b3561860cdc4d876966539b36'
