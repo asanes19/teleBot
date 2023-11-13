@@ -84,6 +84,8 @@ if __name__ == '__main__':
                         elif '2' in message_text or 'بيع' in message_text or 'بيع usdt' in message_text:
                             current_state = 1
                             response = keyword_responses['بيع']
+                        elif 'مساعدة' in message_text:
+                            response = keyword_responses['مساعدة']
                         else:
                             response = keyword_responses['بدا']
 
