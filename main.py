@@ -28,7 +28,8 @@ conn.commit()
 keyword_responses = {
     'تاكيد': "هل تريد الاستمرار؟",
     'لا': "حسنا يمكنك دائما بدا عمليات البيع والشراء عن طريق ادخال كلمة 'بدا'",
-    'نعم': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' للانتهاء من العملية",
+    'نعم_شراء': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال زين كاش الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' للانتهاء من العملية",
+    'نعم_بيع': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' للانتهاء من العملية",
     'تم': "نشكركم على تعاملكم معنا, لا تنسوا اجراء الكثير من المعاملات الجديدة عن طريق ادخال كلمة 'بدا'",
     'مساعدة': "نعتذر لك إذا واجهتم مشكلة معينة. سيقوم أحد موظفينا بالتواصل معكم في أسرع وقت ممكن.",
     'شراء': "الرجاء ادخال القيمة التي تريد شراؤها.",
@@ -82,7 +83,7 @@ if __name__ == '__main__':
                             current_state = 1
                             response = keyword_responses['شراء']
                         elif '2' in message_text or 'بيع' in message_text or 'بيع usdt' in message_text:
-                            current_state = 1
+                            current_state = 4
                             response = keyword_responses['بيع']
                         elif 'مساعدة' in message_text:
                             conversation_active = False
@@ -102,7 +103,33 @@ if __name__ == '__main__':
                     elif current_state == 2:
                         if 'نعم' in message_text:
                             current_state = 3
-                            response = keyword_responses['نعم']
+                            response = keyword_responses['نعم_شراء']
+                            await event.respond(file='code.png')
+                        elif 'لا' in message_text:
+                            current_state = 0
+                            response = keyword_responses['لا']
+                            conversation_active = False
+                        elif 'مساعدة' in message_text:
+                            current_state = 0
+                            response = keyword_responses['مساعدة']
+                            conversation_active = False
+                        else:
+                            response = keyword_responses['تاكيد']
+
+
+                    elif current_state == 4:
+                        if any(word.isdigit() and int(word) >= 1 for word in message_text.split()):
+                            current_state = 5
+                            response = keyword_responses['القيمة']
+                        elif any(word.isalpha() for word in message_text.split()):
+                            response = keyword_responses['التحويل']
+                        else:
+                            response = keyword_responses['التحويل']
+
+                    elif current_state == 5:
+                        if 'نعم' in message_text:
+                            current_state = 6
+                            response = keyword_responses['نعم_بيع']
                             await event.respond(file='code.png')
                         elif 'لا' in message_text:
                             current_state = 0
