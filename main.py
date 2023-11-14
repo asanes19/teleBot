@@ -100,16 +100,10 @@ if __name__ == '__main__':
                         else:
                             response = keyword_responses['التحويل']
 
-
                     elif current_state == 2:
                         if 'نعم' in message_text:
-                            if 'شراء' in response:
-                                # Additional response for buying
-                                response = "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' للانتهاء من"
-                            elif 'بيع' in response:
-                                # Additional response for selling
-                                response = "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة زين كاش الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' للانتهاء من",
                             current_state = 3
+                            response = keyword_responses['نعم']
                             await event.respond(file='code.png')
                         elif 'لا' in message_text:
                             current_state = 0
