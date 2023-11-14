@@ -84,6 +84,9 @@ if __name__ == '__main__':
                         elif '2' in message_text or 'بيع' in message_text or 'بيع usdt' in message_text:
                             current_state = 1
                             response = keyword_responses['بيع']
+                        elif 'مساعدة' in message_text:
+                            current_state = 0
+                            response = keyword_responses['مساعدة']
                         else:
                             response = keyword_responses['بدا']
 
@@ -93,9 +96,6 @@ if __name__ == '__main__':
                             response = keyword_responses['القيمة']
                         elif any(word.isalpha() for word in message_text.split()):
                             response = keyword_responses['التحويل']
-                        elif 'مساعدة' in message_text:
-                            current_state = 0
-                            response = keyword_responses['مساعدة']
                         else:
                             response = keyword_responses['التحويل']
 
