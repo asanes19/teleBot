@@ -101,13 +101,8 @@ if __name__ == '__main__':
 
                     elif current_state == 2:
                         if 'نعم' in message_text:
-                            if 'شراء' in response:
-                                # Additional response for buying
-                                response = "نموذج الشراء الخاص بك هو ..."
-                            elif 'بيع' in response:
-                                # Additional response for selling
-                                response = "نموذج البيع الخاص بك هو ..."
                             current_state = 3
+                            response = keyword_responses['نعم']
                             await event.respond(file='code.png')
                         elif 'لا' in message_text:
                             current_state = 0
