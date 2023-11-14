@@ -100,6 +100,7 @@ if __name__ == '__main__':
                         else:
                             response = keyword_responses['التحويل']
 
+
                     elif current_state == 2:
                         if 'نعم' in message_text:
                             if 'شراء' in response:
