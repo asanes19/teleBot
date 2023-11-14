@@ -70,6 +70,7 @@ if __name__ == '__main__':
                     conversation_active = False
                     response = keyword_responses['تم']
                 elif 'بدا' in message_text:
+                    current_state = 0
                     conversation_active = True
                     response = keyword_responses['بدا']
                 elif 'مساعدة' in message_text:
