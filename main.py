@@ -28,17 +28,16 @@ conn.commit()
 keyword_responses = {
     'تاكيد': "هل تريد الاستمرار؟",
     'لا': "حسنا يمكنك دائما بدا عمليات البيع والشراء عن طريق ادخال كلمة 'بدا'",
-    'نعم': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' للانتهاء من",
+    'نعم': "الرجاء مسح الكود للقيام بالتحويل وارسال محفظة محفظة الUSDT وادخال كلمة 'تم' بعد الانتهاء.",
     'تم': "نشكركم على تعاملكم معنا, لا تنسوا اجراء الكثير من المعاملات الجديدة عن طريق ادخال كلمة 'بدا'",
     'مساعدة': "نعتذر لك إذا واجهتم مشكلة معينة. سيقوم أحد موظفينا بالتواصل معكم في أسرع وقت ممكن.",
     'شراء': "الرجاء ادخال القيمة التي تريد شراؤها.",
     'بيع': "الرجاء ادخال القيمة التي تريد بيعها.",
     'القيمة': "عظيم! سيرسل لك أحد موظفينا التفاصيل في أقرب وقت.",
     'التحويل': "الرجاء ادخال القيمة على شكل ارقام.",
-    'بدا': "الرجاء اختيار نوع العملية: \n 1-  شراء \n 2- بيع \n,",
+    'بدا': "الرجاء اختيار نوع العملية:\n1- شراء USDT\n2- بيع USDT",
     'default': "مرحبًا بكم عزيزي العميل، نحن هنا لمساعدتك. إذا كنت ترغب في إجراء عملية بيع أو شراء، يُرجى إدخال كلمة 'بدا'. وإذا واجهتكم مشكلة، يُرجى إدخال كلمة 'مساعدة'، وسيتواصل معكم أحد موظفينا في أقرب وقت. نشكركم على تفهمكم."
 }
-
 
 if __name__ == '__main__':
     client = TelegramClient('my_session', API_ID, API_HASH, sequential_updates=True)
@@ -85,9 +84,6 @@ if __name__ == '__main__':
                         elif '2' in message_text or 'بيع' in message_text or 'بيع usdt' in message_text:
                             current_state = 1
                             response = keyword_responses['بيع']
-                        elif 'مساعدة' in message_text:
-                            conversation_active = False
-                            response = keyword_responses['مساعدة']
                         else:
                             response = keyword_responses['بدا']
 
@@ -97,6 +93,8 @@ if __name__ == '__main__':
                             response = keyword_responses['القيمة']
                         elif any(word.isalpha() for word in message_text.split()):
                             response = keyword_responses['التحويل']
+                        elif 'مساعدة' in message_text:
+                            response = keyword_responses['مساعدة']
                         else:
                             response = keyword_responses['التحويل']
 
@@ -110,9 +108,7 @@ if __name__ == '__main__':
                             response = keyword_responses['لا']
                             conversation_active = False
                         elif 'مساعدة' in message_text:
-                            current_state = 0
                             response = keyword_responses['مساعدة']
-                            conversation_active = False
                         else:
                             response = keyword_responses['تاكيد']
 
