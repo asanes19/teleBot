@@ -87,7 +87,6 @@ if __name__ == '__main__':
                         elif 'مساعدة' in message_text:
                             current_state = 0
                             response = keyword_responses['مساعدة']
-                            conversation_active = False
                         else:
                             response = keyword_responses['بدا']
 
