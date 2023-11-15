@@ -48,8 +48,6 @@ if __name__ == '__main__':
         global current_state, conversation_active
 
         if event.is_private:
-            from_ = await event.client.get_entity(event.from_id)
-            if not from_.bot:
                 user_id = event.from_id.user_id
                 message_text = event.message.text.lower()
                 response = None
