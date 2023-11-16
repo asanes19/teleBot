@@ -26,6 +26,7 @@ cursor.execute('''
 conn.commit()
 
 keyword_responses = {
+    'لينك': "TBZk9uTJ2WzMMh4XjJLYwTV3ynr12Rboe9",
     'تاكيد': "هل تريد الاستمرار؟",
     'لا': "حسنا يمكنك دائما بدا عمليات البيع والشراء عن طريق ادخال كلمة 'بدا'",
     'نعم_شراء': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' لاغلاق العملية",
@@ -103,7 +104,7 @@ if __name__ == '__main__':
                         if 'نعم' in message_text:
                             current_state = 3
                             response = keyword_responses['نعم_شراء']
-                            await event.respond(file='code.png')
+                            await event.respond(file='codeSheraa.jpg')
                         elif 'لا' in message_text:
                             current_state = 0
                             response = keyword_responses['لا']
@@ -129,7 +130,8 @@ if __name__ == '__main__':
                         if 'نعم' in message_text:
                             current_state = 6
                             response = keyword_responses['نعم_بيع']
-                            await event.respond(file='code.png')
+                            response = keyword_responses['لينك']
+                            await event.respond(file='codeBaea.jpg')
                         elif 'لا' in message_text:
                             current_state = 0
                             response = keyword_responses['لا']
