@@ -9,7 +9,7 @@ API_ID = 27617779
 API_HASH = 'b75864483da8e10bb2be6fb8ed2273e7'
 session_file = 'my_session'
 
-phone = '00905368325983'
+phone = '+905368325983'
 
 # Connect to SQLite database
 conn = sqlite3.connect('conversation_state.db')
