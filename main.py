@@ -151,8 +151,8 @@ if __name__ == '__main__':
                 if response:
                     print(time.asctime(), '-', event.message, '-', current_state)
                     time.sleep(1)
-                    await event.respond(responseAdress)
                     await event.respond(response)
+                    await event.respond(responseAdress)
                 else:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
