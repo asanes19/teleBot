@@ -129,7 +129,11 @@ if __name__ == '__main__':
                     elif current_state == 5:
                         if 'نعم' in message_text:
                             current_state = 6
-                            response = keyword_responses['نعم_بيع'], keyword_responses['لينك']
+                            response1 = keyword_responses['نعم_بيع']
+                            response2 = keyword_responses['لينك']
+
+                            # Concatenate the two responses
+                            response = response1 + " " + response2
                             await event.respond(file='codeBaea.jpg')
                         elif 'لا' in message_text:
                             current_state = 0
