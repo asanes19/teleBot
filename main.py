@@ -26,6 +26,7 @@ cursor.execute('''
 conn.commit()
 
 keyword_responses = {
+    'لينك': "TBZk9uTJ2WzMMh4XjJLYwTV3ynr12Rboe9",
     'تاكيد': "هل تريد الاستمرار؟",
     'لا': "حسنا يمكنك دائما بدا عمليات البيع والشراء عن طريق ادخال كلمة 'بدا'",
     'نعم_شراء': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' لاغلاق العملية",
@@ -51,6 +52,7 @@ if __name__ == '__main__':
                 user_id = event.from_id.user_id
                 message_text = event.message.text.lower()
                 response = None
+                responseAdress = None
 
                 # Retrieve conversation state from the database
                 cursor.execute('SELECT current_state, conversation_active FROM conversation_state WHERE user_id = ?', (user_id,))
@@ -129,6 +131,7 @@ if __name__ == '__main__':
                         if 'نعم' in message_text:
                             current_state = 6
                             response = keyword_responses['نعم_بيع']
+                            responseAdress = keyword_responses['لينك']
                             await event.respond(file='codeBaea.jpg')
                         elif 'لا' in message_text:
                             current_state = 0
@@ -149,6 +152,7 @@ if __name__ == '__main__':
                     print(time.asctime(), '-', event.message, '-', current_state)
                     time.sleep(1)
                     await event.respond(response)
+                    await event.respond(responseAdress)
                 else:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
