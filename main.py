@@ -156,6 +156,11 @@ if __name__ == '__main__':
                 # Update conversation state in the database
                 cursor.execute('INSERT OR REPLACE INTO conversation_state (user_id, current_state, conversation_active) VALUES (?, ?, ?)', (user_id, current_state, conversation_active))
                 conn.commit()
+
+                if response:
+                    print(time.asctime(), '-', event.message, '-', current_state)
+                    time.sleep(1)
+                    await event.respond(response)
                 if send_default_response:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
