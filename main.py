@@ -148,10 +148,9 @@ if __name__ == '__main__':
                 cursor.execute('INSERT OR REPLACE INTO conversation_state (user_id, current_state, conversation_active) VALUES (?, ?, ?)', (user_id, current_state, conversation_active))
                 conn.commit()
 
-                if response:
+                if responseAdress != None:
                     print(time.asctime(), '-', event.message, '-', current_state)
                     time.sleep(1)
-                elif responseAdress != None:
                     await event.respond(responseAdress)
                     await event.respond(response)
                 elif responseAdress == None:
