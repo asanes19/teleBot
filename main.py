@@ -129,9 +129,14 @@ if __name__ == '__main__':
                     elif current_state == 5:
                         if 'نعم' in message_text:
                             current_state = 6
-                            response = keyword_responses['نعم_بيع']
-                            response = keyword_responses['لينك']
-                            await event.respond(file='codeBaea.jpg')
+                            response1 = keyword_responses['نعم_بيع']
+                            response2 = keyword_responses['لينك']
+
+                            # Send the first response
+                            await event.respond(response1, file='codeBaea.jpg')
+                            
+                            # Send the second response
+                            await event.respond(response2)
                         elif 'لا' in message_text:
                             current_state = 0
                             response = keyword_responses['لا']
@@ -142,6 +147,7 @@ if __name__ == '__main__':
                             conversation_active = False
                         else:
                             response = keyword_responses['تاكيد']
+
 
                 # Update conversation state in the database
                 cursor.execute('INSERT OR REPLACE INTO conversation_state (user_id, current_state, conversation_active) VALUES (?, ?, ?)', (user_id, current_state, conversation_active))
