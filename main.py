@@ -77,6 +77,8 @@ if __name__ == '__main__':
                 else:
                     response = keyword_responses['default']
 
+                    send_default_response = True
+
                 if conversation_active:
                     if current_state == 0:
                         if '1' in message_text or 'شراء' in message_text or 'شراء usdt' in message_text:
@@ -132,9 +134,14 @@ if __name__ == '__main__':
                             response1 = keyword_responses['نعم_بيع']
                             response2 = keyword_responses['لينك']
 
-                            # Concatenate the two responses
-                            response = response1 + " " + response2
-                            await event.respond(file='codeBaea.jpg')
+                            # Send the first response
+                            await event.respond(response1, file='codeBaea.jpg')
+
+                            # Send the second response
+                            await event.respond(response2)
+
+                            # Since we've sent specific responses, set the flag to False
+                            send_default_response = False
                         elif 'لا' in message_text:
                             current_state = 0
                             response = keyword_responses['لا']
@@ -149,12 +156,7 @@ if __name__ == '__main__':
                 # Update conversation state in the database
                 cursor.execute('INSERT OR REPLACE INTO conversation_state (user_id, current_state, conversation_active) VALUES (?, ?, ?)', (user_id, current_state, conversation_active))
                 conn.commit()
-
-                if response:
-                    print(time.asctime(), '-', event.message, '-', current_state)
-                    time.sleep(1)
-                    await event.respond(response)
-                else:
+                if send_default_response:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
 
