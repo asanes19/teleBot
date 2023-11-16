@@ -130,8 +130,8 @@ if __name__ == '__main__':
                     elif current_state == 5:
                         if 'نعم' in message_text:
                             current_state = 6
-                            response = keyword_responses['نعم_بيع']
                             responseAdress = keyword_responses['لينك']
+                            response = keyword_responses['نعم_بيع']
                             await event.respond(file='codeBaea.jpg')
                         elif 'لا' in message_text:
                             current_state = 0
@@ -151,8 +151,8 @@ if __name__ == '__main__':
                 if response:
                     print(time.asctime(), '-', event.message, '-', current_state)
                     time.sleep(1)
-                    await event.respond(response)
                     await event.respond(responseAdress)
+                    await event.respond(response)
                 else:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
