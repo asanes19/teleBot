@@ -26,11 +26,10 @@ cursor.execute('''
 conn.commit()
 
 keyword_responses = {
-    'لينك': "TBZk9uTJ2WzMMh4XjJLYwTV3ynr12Rboe9",
     'تاكيد': "هل تريد الاستمرار؟",
     'لا': "حسنا يمكنك دائما بدا عمليات البيع والشراء عن طريق ادخال كلمة 'بدا'",
     'نعم_شراء': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال USDT الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' لاغلاق العملية",
-    'نعم_بيع': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال زين كاش الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' لاغلاق العملية",
+    'نعم_بيع': "الرجاء مسح الكود للقيام بالتحويل وبعدها ارسل صورة التحويل ورقم محفظة ال زين كاش الخاصة بك \n وبعد الانتهاء ادخل كلمة 'تم' لاغلاق العملية \n USDT Wallet Address: TBZk9uTJ2WzMMh4XjJLYwTV3ynr12Rboe9",
     'تم': "نشكركم على تعاملكم معنا, لا تنسوا اجراء الكثير من المعاملات الجديدة عن طريق ادخال كلمة 'بدا'",
     'مساعدة': "نعتذر لك إذا واجهتم مشكلة معينة. سيقوم أحد موظفينا بالتواصل معكم في أسرع وقت ممكن.",
     'شراء': "الرجاء ادخال القيمة التي تريد شراؤها.",
@@ -76,8 +75,6 @@ if __name__ == '__main__':
                     response = keyword_responses['مساعدة']
                 else:
                     response = keyword_responses['default']
-
-                    send_default_response = True
 
                 if conversation_active:
                     if current_state == 0:
@@ -131,17 +128,8 @@ if __name__ == '__main__':
                     elif current_state == 5:
                         if 'نعم' in message_text:
                             current_state = 6
-                            response1 = keyword_responses['نعم_بيع']
-                            response2 = keyword_responses['لينك']
-
-                            # Send the first response
-                            await event.respond(response1, file='codeBaea.jpg')
-
-                            # Send the second response
-                            await event.respond(response2)
-
-                            # Since we've sent specific responses, set the flag to False
-                            send_default_response = False
+                            response = keyword_responses['نعم_بيع']
+                            await event.respond(file='codeBaea.jpg')
                         elif 'لا' in message_text:
                             current_state = 0
                             response = keyword_responses['لا']
@@ -161,7 +149,7 @@ if __name__ == '__main__':
                     print(time.asctime(), '-', event.message, '-', current_state)
                     time.sleep(1)
                     await event.respond(response)
-                if send_default_response:
+                else:
                     default_response = keyword_responses['default']
                     await event.respond(default_response)
 
